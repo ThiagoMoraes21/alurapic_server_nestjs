@@ -23,10 +23,9 @@ export class Usuario {
     senha: string;
 
     @IsNotEmpty({
-        message: 'nomeComplete é obrigatório'
+        message: 'nomeCompleto é obrigatório'
     })
     nomeCompleto: string;
 
-    @IsDate()
     dataDeEntrada: Date;
 }
