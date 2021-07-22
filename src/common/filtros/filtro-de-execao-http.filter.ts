@@ -12,8 +12,8 @@ export class FiltroDeExecaoHttp implements ExceptionFilter {
 
     catch(exception: Error, host: ArgumentsHost) {
         const context = host.switchToHttp();
-        const req = context.getRequest();
-        const res = context.getResponse();
+        const req = context.getRequest<Request>();
+        const res = context.getResponse<Response>();
 
         const { status, body } = exception instanceof HttpException ?
             {
@@ -26,7 +26,7 @@ export class FiltroDeExecaoHttp implements ExceptionFilter {
                     statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
                     timestamp: new Date().toISOString(),
                     message: exception.message,
-                    path: req.path
+                    path: req.url
                 }
             }
         
