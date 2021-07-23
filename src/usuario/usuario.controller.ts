@@ -1,5 +1,5 @@
 import { UsuarioService } from './usuario.service';
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Param, Post, Res } from "@nestjs/common";
 import { Usuario } from './entity/usuario.entity';
 
 @Controller('usuarios')
@@ -17,8 +17,10 @@ export class UsuarioController {
     }
 
     @Post()
-    public cria(@Body() usuario: Usuario): Usuario {
-        throw new Error('Erro no cadastro de usuário.');
-        return this.usuarioService.cria(usuario);
+    public cria(@Body() usuario: Usuario, @Res() res): void {
+        const usuarioCriado = this.usuarioService.cria(usuario);
+        res.status(HttpStatus.CREATED)
+            .location(`/users/${usuarioCriado.nomeDeUsuario}`)
+            .json(usuarioCriado);
     }
 }
