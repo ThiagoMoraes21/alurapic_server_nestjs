@@ -1,5 +1,7 @@
+import { NestResponseBuilder } from './../core/http/nest-response-builder';
+import { NestResponse } from './../core/http/nest-response';
 import { UsuarioService } from './usuario.service';
-import { Body, Controller, Get, HttpStatus, Param, Post, Res } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Param, Post } from "@nestjs/common";
 import { Usuario } from './entity/usuario.entity';
 
 @Controller('usuarios')
@@ -17,10 +19,14 @@ export class UsuarioController {
     }
 
     @Post()
-    public cria(@Body() usuario: Usuario, @Res() res): void {
+    public cria(@Body() usuario: Usuario): NestResponse {
         const usuarioCriado = this.usuarioService.cria(usuario);
-        res.status(HttpStatus.CREATED)
-            .location(`/users/${usuarioCriado.nomeDeUsuario}`)
-            .json(usuarioCriado);
+        return new NestResponseBuilder()
+            .status(HttpStatus.CREATED)
+            .headers({
+                'Location': `/users/${usuarioCriado.nomeDeUsuario}`
+            })
+            .body(usuarioCriado)
+            .build();
     }
 }
